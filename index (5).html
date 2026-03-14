@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniya S — UX/UI Designer</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #F7F5F1;
+      --surface:   #FFFFFF;
+      --ink:       #1A1714;
+      --muted:     #7A756E;
+      --accent:    #C5693A;
+      --accent-lt: #F2E8DF;
+      --border:    #E4E0D9;
+      --serif:     'DM Serif Display', Georgia, serif;
+      --sans:      'DM Sans', system-ui, sans-serif;
+      --gap:       clamp(24px, 5vw, 64px);
+      --max:       1100px;
+      --radius:    12px;
+      --ease:      cubic-bezier(.16,1,.3,1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      max-width: var(--max);
+      margin-inline: auto;
+      padding-inline: var(--gap);
+    }
+    .section { padding-block: clamp(72px, 10vw, 120px); }
+    .section-label {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::before {
+      content: ''; display: inline-block;
+      width: 24px; height: 1.5px; background: var(--accent);
+    }
+    .divider { border: none; border-top: 1px solid var(--border); }
+
+    /* scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .6s var(--ease), transform .6s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: .1s; }
+    .d2 { transition-delay: .2s; }
+    .d3 { transition-delay: .3s; }
+
+    /* ══════════════════════════════
+       NAV
+    ══════════════════════════════ */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(247,245,241,0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: var(--max); margin-inline: auto;
+      padding: 16px var(--gap);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-family: var(--serif); font-size: 20px; color: var(--ink); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500; color: var(--muted);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-hire {
+      background: var(--ink); color: #fff;
+      padding: 9px 20px; border-radius: 999px;
+      font-size: 13px; font-weight: 500;
+      transition: background .2s;
+    }
+    .nav-hire:hover { background: var(--accent); }
+
+    /* ══════════════════════════════
+       HERO
+    ══════════════════════════════ */
+    #hero {
+      min-height: 96vh;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+    .hero-left {
+      background: var(--ink); color: #F7F5F1;
+      padding: clamp(56px,9vw,108px) var(--gap) clamp(56px,9vw,108px) calc(var(--gap)*1.2);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 28px;
+    }
+    .hero-h1 {
+      font-family: var(--serif);
+      font-size: clamp(38px,5.2vw,70px);
+      line-height: 1.08; margin-bottom: 24px; color: #F7F5F1;
+    }
+    .hero-h1 em { color: var(--accent); font-style: italic; }
+    .hero-sub {
+      font-size: 16px; font-weight: 300; color: #C4BEB5;
+      max-width: 440px; line-height: 1.7; margin-bottom: 44px;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-fill {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--accent); color: #fff;
+      padding: 13px 26px; border-radius: 999px;
+      font-size: 14px; font-weight: 500;
+      transition: background .2s, transform .2s;
+    }
+    .btn-fill:hover { background: #a84f27; transform: translateY(-2px); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 9px;
+      border: 1px solid rgba(255,255,255,.28); color: #F7F5F1;
+      padding: 13px 26px; border-radius: 999px;
+      font-size: 14px; font-weight: 500;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,.07); }
+    .hero-right {
+      background: var(--accent-lt);
+      padding: clamp(56px,9vw,108px) calc(var(--gap)*1.2) clamp(56px,9vw,108px) var(--gap);
+      display: flex; flex-direction: column; justify-content: center; gap: 20px;
+    }
+    .hero-card {
+      background: var(--surface); border-radius: 18px;
+      padding: 24px 26px; border: 1px solid var(--border);
+    }
+    .hero-card-tag {
+      font-size: 10px; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    .hero-card p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+    .hero-card strong { color: var(--ink); font-weight: 500; }
+    .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .hpill {
+      background: var(--accent-lt); border-radius: 999px;
+      padding: 5px 13px; font-size: 12px; color: var(--accent); font-weight: 500;
+    }
+
+    /* ══════════════════════════════
+       ABOUT
+    ══════════════════════════════ */
+    #about { background: var(--surface); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 2fr;
+      gap: clamp(40px,6vw,80px); align-items: start;
+    }
+    .about-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--accent-lt);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 24px; color: var(--accent);
+      margin-bottom: 18px;
+    }
+    .about-name { font-family: var(--serif); font-size: 28px; line-height: 1.1; margin-bottom: 4px; }
+    .about-role { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .about-meta-row {
+      display: flex; align-items: flex-start; gap: 9px;
+      font-size: 13px; color: var(--muted); margin-bottom: 10px;
+    }
+    .about-meta-row svg { flex-shrink: 0; margin-top: 3px; }
+    .about-edu-card {
+      margin-top: 22px; background: var(--accent-lt);
+      border-radius: var(--radius); padding: 16px 18px;
+      font-size: 13px; line-height: 1.65;
+    }
+    .about-edu-card strong { display: block; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .about-edu-card span { color: var(--muted); }
+    .about-headline {
+      font-family: var(--serif);
+      font-size: clamp(20px,2.8vw,28px); line-height: 1.35; margin-bottom: 22px;
+    }
+    .about-body p { font-size: 15px; color: #4A4540; line-height: 1.85; margin-bottom: 14px; }
+
+    /* ══════════════════════════════
+       HOW I DESIGN
+    ══════════════════════════════ */
+    #approach { background: var(--bg); }
+    .approach-heading {
+      font-family: var(--serif);
+      font-size: clamp(30px,4.5vw,50px); line-height: 1.15;
+      max-width: 500px; margin-bottom: 8px;
+    }
+    .approach-sub { font-size: 15px; color: var(--muted); max-width: 460px; line-height: 1.7; }
+    .approach-list { margin-top: 52px; }
+    .approach-item {
+      display: grid; grid-template-columns: 72px 1fr;
+      gap: 28px; align-items: start;
+      padding: 32px 0; border-bottom: 1px solid var(--border);
+    }
+    .approach-item:first-child { border-top: 1px solid var(--border); }
+    .approach-num {
+      font-family: var(--serif); font-size: 44px; line-height: 1;
+      -webkit-text-stroke: 1.5px var(--accent); color: transparent;
+    }
+    .approach-content h3 { font-size: 18px; font-weight: 500; margin-bottom: 8px; }
+    .approach-content p { font-size: 14px; color: var(--muted); line-height: 1.75; max-width: 560px; }
+
+    /* ══════════════════════════════
+       PROJECTS
+    ══════════════════════════════ */
+    #work { background: var(--surface); }
+    .work-header {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 40px; align-items: end; margin-bottom: 64px;
+    }
+    .work-header h2 {
+      font-family: var(--serif);
+      font-size: clamp(34px,5vw,56px); line-height: 1.1;
+    }
+    .work-header h2 em { font-style: italic; color: var(--accent); }
+    .work-header p { font-size: 15px; color: var(--muted); line-height: 1.7; }
+    .project-card {
+      border: 1px solid var(--border); border-radius: 20px;
+      overflow: hidden; margin-bottom: 36px; background: var(--bg);
+    }
+    .project-banner {
+      background: var(--ink); color: #F7F5F1;
+      padding: 40px 44px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 24px; align-items: center;
+    }
+    .project-banner.warm { background: #2E1F18; }
+    .project-banner.cool { background: #162028; }
+    .project-tag { font-size: 11px; letter-spacing: .13em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .project-title { font-family: var(--serif); font-size: clamp(26px,4vw,44px); line-height: 1.1; }
+    .project-pitch { margin-top: 12px; font-size: 14px; color: #C4BEB5; max-width: 500px; line-height: 1.65; }
+    .project-badges { display: flex; flex-direction: column; gap: 9px; align-items: flex-end; }
+    .badge {
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+      border-radius: 999px; padding: 5px 14px; font-size: 12px; white-space: nowrap;
+    }
+    .project-body { padding: 40px 44px; }
+    .project-grid {
+      display: grid; grid-template-columns: repeat(4,1fr); margin-bottom: 28px;
+    }
+    .pblock { padding: 22px 18px 22px 0; border-right: 1px solid var(--border); }
+    .pblock:last-child { border-right: none; padding-right: 0; }
+    .pblock:not(:first-child) { padding-left: 18px; }
+    .pb-label { font-size: 10px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 9px; }
+    .pb-title { font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--ink); }
+    .pblock p  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+    .pblock ul { padding-left: 15px; }
+    .pblock li { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 3px; }
+    .project-lower { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .pblock-wide {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px;
+    }
+    .outcome-chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 10px; }
+    .ochip {
+      background: var(--accent-lt); border-radius: 999px;
+      padding: 5px 14px; font-size: 12px; font-weight: 500; color: var(--accent);
+    }
+    .project-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 24px; font-size: 13px; font-weight: 500;
+      color: var(--accent); border-bottom: 1px solid var(--accent);
+      padding-bottom: 2px; transition: gap .2s;
+    }
+    .project-link:hover { gap: 14px; }
+
+    /* ══════════════════════════════
+       SKILLS & TOOLS
+    ══════════════════════════════ */
+    #skills { background: var(--bg); }
+    .skills-heading {
+      font-family: var(--serif);
+      font-size: clamp(30px,4.5vw,50px); line-height: 1.15; margin-bottom: 48px;
+    }
+    .skills-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .skill-block {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 32px 28px;
+    }
+    .skill-block h3 {
+      font-size: 14px; font-weight: 500; margin-bottom: 20px;
+      padding-bottom: 14px; border-bottom: 1px solid var(--border);
+    }
+    .pill-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 999px; padding: 7px 16px; font-size: 13px;
+      transition: background .2s, border-color .2s;
+    }
+    .pill:hover { background: var(--accent-lt); border-color: var(--accent); }
+    .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .tool-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; background: var(--bg);
+      border-radius: var(--radius); border: 1px solid var(--border);
+      font-size: 14px; transition: background .2s, border-color .2s;
+    }
+    .tool-row:hover { background: var(--accent-lt); border-color: var(--accent); }
+    .tool-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+    /* ══════════════════════════════
+       CONTACT
+    ══════════════════════════════ */
+    #contact { background: var(--ink); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: clamp(40px,6vw,80px); align-items: center;
+    }
+    .section-label-dk {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: #7A756E; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label-dk::before { content: ''; display: inline-block; width: 24px; height: 1.5px; background: #7A756E; }
+    .contact-heading {
+      font-family: var(--serif);
+      font-size: clamp(32px,5vw,56px); line-height: 1.1; color: #F7F5F1; margin-bottom: 18px;
+    }
+    .contact-heading em { color: var(--accent); font-style: italic; }
+    .contact-sub { font-size: 15px; color: #C4BEB5; max-width: 380px; line-height: 1.75; margin-bottom: 32px; }
+    .contact-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-accent {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--accent); color: #fff;
+      padding: 13px 26px; border-radius: 999px;
+      font-size: 14px; font-weight: 500;
+      transition: background .2s, transform .2s;
+    }
+    .btn-accent:hover { background: #a84f27; transform: translateY(-2px); }
+    .btn-ghost-white {
+      display: inline-flex; align-items: center; gap: 9px;
+      border: 1px solid rgba(255,255,255,.28); color: #F7F5F1;
+      padding: 13px 26px; border-radius: 999px;
+      font-size: 14px; font-weight: 500;
+      transition: border-color .2s, background .2s;
+    }
+    .btn-ghost-white:hover { border-color: #fff; background: rgba(255,255,255,.07); }
+    .contact-right { display: flex; flex-direction: column; gap: 14px; }
+    .c-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px 20px;
+      border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius);
+      transition: background .2s;
+    }
+    .c-row:hover { background: rgba(255,255,255,.04); }
+    .c-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(197,105,58,.2);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .c-text { display: flex; flex-direction: column; gap: 2px; }
+    .c-label { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #7A756E; }
+    .c-val { font-size: 14px; color: #F7F5F1; }
+    .c-val a { color: #F7F5F1; transition: color .2s; }
+    .c-val a:hover { color: var(--accent); }
+
+    /* Footer */
+    .footer-strip {
+      margin-top: 80px; padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 10px;
+      font-size: 13px; color: #7A756E;
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 900px) {
+      #hero              { grid-template-columns: 1fr; }
+      .hero-left         { min-height: 70vh; justify-content: flex-end; padding-bottom: 48px; }
+      .nav-links         { display: none; }
+      .about-grid        { grid-template-columns: 1fr; }
+      .work-header       { grid-template-columns: 1fr; }
+      .project-banner    { grid-template-columns: 1fr; }
+      .project-badges    { flex-direction: row; }
+      .project-grid      { grid-template-columns: 1fr 1fr; }
+      .pblock            { border-right: none; border-bottom: 1px solid var(--border); padding: 18px 0; }
+      .pblock:last-child { border-bottom: none; }
+      .pblock:not(:first-child) { padding-left: 0; }
+      .skills-wrap       { grid-template-columns: 1fr; }
+      .contact-grid      { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 580px) {
+      .project-body      { padding: 26px 18px; }
+      .project-banner    { padding: 28px 18px; }
+      .project-grid      { grid-template-columns: 1fr; }
+      .project-lower     { grid-template-columns: 1fr; }
+      .tools-grid        { grid-template-columns: 1fr; }
+      .approach-item     { grid-template-columns: 48px 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAV ══════════════════════════════════════════ -->
+  <nav>
+    <div class="nav-inner">
+      <span class="nav-logo">Iniya S.</span>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#approach">Approach</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="/cdn-cgi/l/email-protection#cfa6a1a6b6aefdfbfbfc8fa8a2aea6a3e1aca0a2" class="nav-hire">Hire Me · 6379807465</a>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ═════════════════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow reveal">UX/UI Designer · Villupuram, Tamil Nadu</p>
+      <h1 class="hero-h1 reveal d1">
+        Designing Simple,<br><em>User-Centered</em><br>Digital Experiences.
+      </h1>
+      <p class="hero-sub reveal d2">
+        I'm Iniya S, a UX/UI designer from Villupuram, specializing in clarity, structure, and behavior-driven design.
+      </p>
+      <div class="hero-btns reveal d3">
+        <a href="https://www.behance.net/iniyas1/" target="_blank" class="btn-fill">
+          View My Work
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="iniya-resume.docx" class="btn-outline" download>
+          Download Resume
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 3v7m0 0-3-3m3 3 3-3M4 13h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-card reveal d1">
+        <p class="hero-card-tag">Specialisation</p>
+        <p>Clarity-driven design that guides users with confidence — from first click to final action.</p>
+        <div class="hero-pills">
+          <span class="hpill">User Research</span>
+          <span class="hpill">Wireframing</span>
+          <span class="hpill">Prototyping</span>
+          <span class="hpill">UI Design</span>
+        </div>
+      </div>
+      <div class="hero-card reveal d2">
+        <p class="hero-card-tag">Education</p>
+        <p><strong>BBA — Thiruvalluvar University</strong><br>Kamban College of Arts &amp; Science, Tiruvannamalai</p>
+      </div>
+      <div class="hero-card reveal d3">
+        <p class="hero-card-tag">Currently</p>
+        <p>Open to UX/UI roles, freelance projects, and meaningful collaborations.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══ ABOUT ═════════════════════════════════════════ -->
+  <section id="about" class="section">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="about-avatar" style="background:none;padding:0;overflow:hidden;"><img src="cookedup-banner.png" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" /></div>
+          <h2 class="about-name">Iniya S</h2>
+          <p class="about-role">UX/UI Designer</p>
+          <div class="about-meta-row">
+            <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path d="M8 1.5A4.5 4.5 0 0 1 12.5 6c0 3-4.5 8.5-4.5 8.5S3.5 9 3.5 6A4.5 4.5 0 0 1 8 1.5Z" stroke="var(--muted)" stroke-width="1.3"/><circle cx="8" cy="6" r="1.5" stroke="var(--muted)" stroke-width="1.3"/></svg>
+            Villupuram, Tamil Nadu
+          </div>
+          <div class="about-meta-row">
+            <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="10" rx="2" stroke="var(--muted)" stroke-width="1.3"/><path d="m2 5 6 4 6-4" stroke="var(--muted)" stroke-width="1.3"/></svg>
+            <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7c151215051d4e48484f3c1b111d1510521f1311">[email&#160;protected]</a>
+          </div>
+          <div class="about-edu-card">
+            <strong>Bachelor of Business Administration</strong>
+            <span>Thiruvalluvar University<br>Kamban College of Arts &amp; Science<br>Tiruvannamalai</span>
+          </div>
+        </div>
+        <div class="reveal d1">
+          <p class="section-label">About Me</p>
+          <p class="about-headline">From business thinking to<br>human-centered design.</p>
+          <div class="about-body">
+            <p>I am Iniya S, from Villupuram, with a Bachelor of Business Administration (BBA) from Thiruvalluvar University. After my degree, I transitioned into UX design by completing a formal course in user research, wireframing, prototyping, and interface design.</p>
+            <p>I design clear, structured digital products that guide users with confidence. My business background gives me an edge in understanding product goals, stakeholder needs, and the balance between user value and business outcomes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══ HOW I DESIGN ══════════════════════════════════ -->
+  <section id="approach" class="section">
+    <div class="wrap">
+      <p class="section-label reveal">How I Design</p>
+      <h2 class="approach-heading reveal d1">A clear process for every project.</h2>
+      <p class="approach-sub reveal d2">Four principles that guide every design decision — from discovery to delivery.</p>
+      <div class="approach-list">
+        <div class="approach-item reveal">
+          <div class="approach-num">01</div>
+          <div class="approach-content">
+            <h3>Identify Real User Friction</h3>
+            <p>I begin with genuine curiosity — interviewing users, observing behaviour, and mapping pain points before drawing a single wireframe. Good design starts with honest listening.</p>
+          </div>
+        </div>
+        <div class="approach-item reveal">
+          <div class="approach-num">02</div>
+          <div class="approach-content">
+            <h3>Simplify Before Adding Features</h3>
+            <p>Complexity is the enemy of usability. I strip interactions to their essence, removing noise before considering additions — because clarity is always the better feature.</p>
+          </div>
+        </div>
+        <div class="approach-item reveal">
+          <div class="approach-num">03</div>
+          <div class="approach-content">
+            <h3>Design for Behaviour and Clarity</h3>
+            <p>I design with how people actually think and act — not how we wish they would. Every layout, label, and interaction is grounded in real-world behaviour and cognitive patterns.</p>
+          </div>
+        </div>
+        <div class="approach-item reveal">
+          <div class="approach-num">04</div>
+          <div class="approach-content">
+            <h3>Validate with User Actions and Metrics</h3>
+            <p>Opinions aren't evidence. I test prototypes with real users, track completion rates, and let behaviour — not assumptions — determine whether a design is truly working.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══ PROJECTS ══════════════════════════════════════ -->
+  <section id="work" class="section">
+    <div class="wrap">
+      <div class="work-header">
+        <div>
+          <p class="section-label reveal">Selected Work</p>
+          <h2 class="reveal d1">Selected<br><em>Projects</em></h2>
+        </div>
+        <p class="reveal d2">Three end-to-end case studies — each following a structured UX process from problem framing to final outcomes.</p>
+      </div>
+
+      <!-- GentleFit -->
+      <div class="project-card reveal">
+        <div class="project-banner">
+          <div>
+            <p class="project-tag">Wellness · Mobile App</p>
+            <h3 class="project-title">GentleFit</h3>
+            <p class="project-pitch">A low-impact fitness app designed for users who feel intimidated by conventional workout platforms — making movement feel achievable, not overwhelming.</p>
+          </div>
+          <div class="project-badges">
+            <span class="badge">UX Research</span>
+            <span class="badge">Prototyping</span>
+            <span class="badge">UI Design</span>
+          </div>
+        </div>
+        <div class="project-body">
+        <div style="width:100%;overflow:hidden;border-radius:12px;margin-bottom:24px;">
+          <img src="gentlefit-banner.png" style="width:100%;display:block;border-radius:12px;" />
+        </div>
+          <div class="project-grid">
+            <div class="pblock">
+              <p class="pb-label">Problem Statement</p>
+              <p class="pb-title">The Challenge</p>
+              <p>First-time fitness app users felt overwhelmed by progress tracking, complex navigation, and unrealistic expectations — leading to early drop-off.</p>
+            </div>
+            <div class="pblock">
+              <p class="pb-label">Target Users</p>
+              <p class="pb-title">Who It's For</p>
+              <ul><li>Beginners new to fitness apps</li><li>Low-to-moderate activity levels</li><li>People recovering from injury</li><li>Ages 25–45, mixed digital literacy</li></ul>
+            </div>
+            <div class="pblock">
+              <p class="pb-label">Research Insights</p>
+              <p class="pb-title">What I Found</p>
+              <ul><li>Users wanted encouragement, not judgment</li><li>Complex dashboards created anxiety</li><li>Short, flexible sessions preferred</li><li>Visual progress &gt; numeric tracking</li></ul>
+            </div>
+            <div class="pblock">
+              <p class="pb-label">Design Goals</p>
+              <p class="pb-title">What I Set Out to Do</p>
+              <ul><li>Reduce onboarding to under 3 steps</li><li>Make progress feel gentle &amp; visible</li><li>Tone — supportive, not competitive</li><li>Design for low-distraction sessions</li></ul>
+            </div>
+          </div>
+          <div class="project-lower">
+            <div class="pblock-wide">
+              <p class="pb-label">Key Design Decisions</p>
+              <p style="font-size:13px;color:var(--muted);line-height:1.7;">Replaced numeric progress bars with illustrated milestone moments. Used a calm colour palette with micro-animations on workout completion. Onboarding reduced to a 2-step preference quiz with no account wall.</p>
+            </div>
+            <div class="pblock-wide">
+              <p class="pb-label">Outcome &amp; Learnings</p>
+              <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px;">Usability tests showed users completed full sessions without dropping off. Tone-first approach was consistently praised.</p>
+              <div class="outcome-chips"><span class="ochip">↑ Session completion</span><span class="ochip">↓ Onboarding drop-off</span><span class="ochip">High satisfaction</span></div>
+            </div>
+          </div>
+          <a href="https://www.behance.net/iniyas1/" target="_blank" class="project-link">View on Behance <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+
+      <!-- CookedUp -->
+      <div class="project-card reveal">
+        <div class="project-banner warm">
+          <div>
+            <p class="project-tag">Food &amp; Lifestyle · Mobile App</p>
+            <h3 class="project-title">CookedUp</h3>
+            <p class="project-pitch">A recipe discovery app that reduces decision fatigue for home cooks — surfacing the right recipe based on what's already in your kitchen.</p>
+          </div>
+          <div class="project-badges">
+            <span class="badge">User Flows</span>
+            <span class="badge">Interaction Design</span>
+            <span class="badge">Figma</span>
+          </div>
+        </div>
+        <div class="project-body">
+        <div style="width:100%;overflow:hidden;border-radius:12px;margin-bottom:24px;">
+          <img src="profile.png" style="width:100%;display:block;border-radius:12px;" />
+        </div>
+          <div class="project-grid">
+            <div class="pblock">
+              <p class="pb-label">Problem Statement</p>
+              <p class="pb-title">The Challenge</p>
+              <p>Home cooks waste time scrolling irrelevant recipes. Apps suggest meals without considering ingredients on hand, causing frustration and food waste.</p>
+            </div>
+            <div class="pblock">
+              <p class="pb-label">Target Users</p>
+              <p class="pb-title">Who It's For</p>
+              <ul><li>Busy working adults cooking at home</li><li>Budget-conscious meal planners</li><li>Cooks 3–5 times per week</li><li>Low-to-moderate cooking confidence</li></ul>
+            </div>
+            <div class="pblock">
+              <p class="pb-label">Research Insights</p>
+              <p class="pb-title">What I Found</p>
+              <ul><li>"What can I make now?" was #1 query</li><li>Ingredient input felt like a chore</li><li>Visual cards drove more engagement</li><li>Users opened apps out of habit</li></ul>
+            </div>
+            <div class="pblock">
+              <p class="pb-label">Design Goals</p>
+              <p class="pb-title">What I Set Out to Do</p>
+              <ul><li>Ingredient input under 30 seconds</li><li>Surface relevant results immediately</li><li>Scannable, visual recipe browsing</li><li>Fewer steps from open to cooking</li></ul>
+            </div>
+          </div>
+          <div class="project-lower">
+            <div class="pblock-wide">
+              <p class="pb-label">Key Design Decisions</p>
+              <p style="font-size:13px;color:var(--muted);line-height:1.7;">Ingredient input uses a fast-tag system — type one letter, tap to confirm. Recipes ranked by match percentage. A "cook now" shortcut bypasses browse entirely.</p>
+            </div>
+            <div class="pblock-wide">
+              <p class="pb-label">Outcome &amp; Learnings</p>
+              <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px;">Users reached recipe selection in under 45 seconds. Tag input system was the most-liked feature.</p>
+              <div class="outcome-chips"><span class="ochip">45s avg. to recipe</span><span class="ochip">↑ Return usage</span><span class="ochip">Tag input top-rated</span></div>
+            </div>
+          </div>
+          <a href="https://www.behance.net/iniyas1/" target="_blank" class="project-link">View on Behance <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+
+      
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══ SKILLS & TOOLS ════════════════════════════════ -->
+  <section id="skills" class="section">
+    <div class="wrap">
+      <p class="section-label reveal">Capabilities</p>
+      <h2 class="skills-heading reveal d1">Skills &amp; Tools</h2>
+      <div class="skills-wrap">
+        <div class="skill-block reveal">
+          <h3>UX / UI Skills</h3>
+          <div class="pill-wrap">
+            <span class="pill">User Research</span>
+            <span class="pill">Wireframing</span>
+            <span class="pill">Prototyping</span>
+            <span class="pill">UI Design</span>
+            <span class="pill">Interaction Design</span>
+            <span class="pill">Usability Testing</span>
+          </div>
+        </div>
+        <div class="skill-block reveal d1">
+          <h3>Tools</h3>
+          <div class="tools-grid">
+            <div class="tool-row"><div class="tool-dot"></div>Figma</div>
+            <div class="tool-row"><div class="tool-dot"></div>Adobe Illustrator</div>
+            <div class="tool-row"><div class="tool-dot"></div>Adobe Photoshop</div>
+            <div class="tool-row"><div class="tool-dot"></div>Miro</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CONTACT ════════════════════════════════════════ -->
+  <section id="contact" class="section">
+    <div class="wrap">
+      <div class="contact-grid">
+        <div class="reveal">
+          <p class="section-label-dk">Contact</p>
+          <h2 class="contact-heading">Available for<br><em>great work.</em></h2>
+          <p class="contact-sub">Open to full-time UX/UI roles, freelance projects, and design collaborations. If you're building something that puts users first, I'd love to be part of it.</p>
+          <div class="contact-actions">
+            <a href="/cdn-cgi/l/email-protection#543d3a3d2d3566606067143339353d387a373b39" class="btn-accent">
+              Let's Connect
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="iniya-resume.docx" class="btn-ghost-white" download>
+              Download Resume
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 3v7m0 0-3-3m3 3 3-3M4 13h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="contact-right reveal d1">
+          <div class="c-row">
+            <div class="c-icon"><svg width="15" height="15" fill="none" viewBox="0 0 16 16"><path d="M8 1.5A4.5 4.5 0 0 1 12.5 6c0 3-4.5 8.5-4.5 8.5S3.5 9 3.5 6A4.5 4.5 0 0 1 8 1.5Z" stroke="#C5693A" stroke-width="1.3"/><circle cx="8" cy="6" r="1.5" stroke="#C5693A" stroke-width="1.3"/></svg></div>
+            <div class="c-text"><span class="c-label">Location</span><span class="c-val">Villupuram, Tamil Nadu, India</span></div>
+          </div>
+          <div class="c-row">
+            <div class="c-icon"><svg width="15" height="15" fill="none" viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="10" rx="2" stroke="#C5693A" stroke-width="1.3"/><path d="m2 5 6 4 6-4" stroke="#C5693A" stroke-width="1.3"/></svg></div>
+            <div class="c-text"><span class="c-label">Email</span><span class="c-val"><a href="/cdn-cgi/l/email-protection#ef868186968edddbdbdcaf88828e8683c18c8082"><span class="__cf_email__" data-cfemail="c6afa8afbfa7f4f2f2f586a1aba7afaae8a5a9ab">[email&#160;protected]</span></a></span></div>
+          </div>
+          <div class="c-row">
+            <div class="c-icon"><svg width="15" height="15" fill="none" viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="10" rx="2" stroke="#C5693A" stroke-width="1.3"/><path d="M5 7h4M5 10h3" stroke="#C5693A" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            <div class="c-text"><span class="c-label">Behance</span><span class="c-val"><a href="https://www.behance.net/iniyas1/" target="_blank">behance.net/iniyas1</a></span></div>
+          </div>
+          <div class="c-row">
+            <div class="c-icon"><svg width="15" height="15" fill="none" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" stroke="#C5693A" stroke-width="1.3"/><path d="M8 5v3l2 2" stroke="#C5693A" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+            <div class="c-text"><span class="c-label">Availability</span><span class="c-val">Open to opportunities ✦</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-strip">
+        <span>© 2025 Iniya S. All rights reserved.</span>
+        <span>UX/UI Designer · Villupuram, Tamil Nadu</span>
+      </div>
+    </div>
+ 
